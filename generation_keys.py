@@ -2,49 +2,58 @@ import os
 import json
 
 import cryptography
+from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.hazmat.primitives import hashes
 
-import info
+
+def gen_keys_for_asym():           #генерация пары ключей для асимметричного алгоритма шифрования
+    print("Generating a key pair for an asymmetric encryption algorithm.\n")
+    keys = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    private_key = keys
+    public_key = keys.public_key()
+    return (private_key, public_key)
 
 
-def gen_key_for_sym():
-    key = os.urandom(32) # это байты
-    print(type(key))
-    print(key)
+def gen_key_for_sym():              # генерация ключа симметричного аллгоритма шифрования
+    print("Symmetric encryption algorithm key generation.\n")
+    print("You can choose the key length yourself from 4 to 56 bytes\n (default 4 bytes)\n")
+    size = 4
+    input(size)
+    key = os.urandom(size)        # от 4х до 56 байт 
     return key
 
 
-def encrypt_key(key):
-    cipher = cryptography.hazmat.primitivities.ciphers.algorithms.Blowfish(key)
-    # ???
+def serializate(private_key, public_key,private_pem, public_pem):
+    # сериализация открытого ключа в файл
+    print("Serializing the public key to a file.\n")
+    with open(public_pem, 'wb') as public_out:
+            public_out.write(public_key.public_bytes(encoding=serialization.Encoding.PEM,
+                 format=serialization.PublicFormat.SubjectPublicKeyInfo))
+    # сериализация закрытого ключа в файл
+    print("Serialization the private key to a file.\n")
+    private_pem = 'private.pem'
+    with open(private_pem, 'wb') as private_out:
+            private_out.write(private_key.private_bytes(encoding=serialization.Encoding.PEM,
+                  format=serialization.PrivateFormat.TraditionalOpenSSL,
+                  encryption_algorithm=serialization.NoEncryption()))
 
 
-def key_to_file(file_name, key):
+
+def encrypt_key(public_key, key):     # шифрование ключа симметричного алгоритма
+    print("Symmetric algorithm key encryption.\n")
+    cipherkey = public_key.encrypt(key, padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()),algorithm=hashes.SHA256(),label = None))
+    return cipherkey
+
+
+def key_to_file(file_name, key):                # сериализация ключа симмеричного алгоритма в файл
     with open(file_name, 'wb') as file:
         file.write(key)
 
 
-def key_from_file(file_name):
+def key_from_file(file_name):                 # десериализация ключа симметричного алгоритма
     with open(file_name, 'rb') as file:
         content = file.read()
     print(type(content))
     print(content)
-
-
-# 8 вариант
-# Blowfish, длина ключа от 32 до 448 бит с шагом 8 бит - предусмотреть
-# пользовательский выбор длины ключа;
-
-# 1. Генерация ключей гибридной системы
-
-# Входные параметры:
-# 1) путь, по которому сериализовать зашифрованный симметричный ключ;
-# 2) путь, по которому сериализовать открытый ключ;
-# 3) путь, по которому сериазизовать закрытый ключ.
-
-# 1.1. Сгеренировать ключ для симметричного алгоритма.
-# 1.2. Сгенерировать ключи для ассиметричного алгоритма.
-# 1.3. Сериализовать ассиметричные ключи.
-# 1.4. Зашифровать ключ симметричного шифрования открытым ключом и
-#      сохранить по указанному пути 
-
-

@@ -1,8 +1,6 @@
-settings = {
-    'initial_file':'path/to/initial/file.txt',
-    'encrypted_file':'path/to/encrypted/file.txt',
-    'decrypted_file':'path/to/decryptad/file.txt',
-    'symmetric_key':'path/to/symmetric/key.txt',
-    'public_key':'path/to/public/key.pem',
-    'secret_key':'path/to/secret/key.pem',
-}
+initial_file = "path/to/initial/file.txt"
+encrypted_file = "path/to/encrypted/file.txt"
+decrypted_file = "path/to/decryptad/file.txt"
+symmetric_encrypt_key = "encrypt_key.txt"
+public_pem = "public.pem"
+private_pem = "private.pem"
