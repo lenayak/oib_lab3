@@ -1,7 +1,5 @@
 import os
-import json
 
-import cryptography
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import padding
@@ -17,7 +15,7 @@ def gen_keys_for_asym():           #генерация пары ключей д�
 
 
 def gen_key_for_sym():              # генерация ключа симметричного аллгоритма шифрования
-    print("Symmetric encryption algorithm key generation.\n")
+    print("Symmetric encryption algorithm key generation.")
     print("You can choose the key length yourself from 4 to 56 bytes\n (default 4 bytes)\n")
     size = 4
     input(size)
@@ -27,12 +25,12 @@ def gen_key_for_sym():              # генерация ключа симмет
 
 def serializate(private_key, public_key,private_pem, public_pem):
     # сериализация открытого ключа в файл
-    print("Serializing the public key to a file.\n")
+    print("Serializing the public key to a file.")
     with open(public_pem, 'wb') as public_out:
             public_out.write(public_key.public_bytes(encoding=serialization.Encoding.PEM,
                  format=serialization.PublicFormat.SubjectPublicKeyInfo))
     # сериализация закрытого ключа в файл
-    print("Serialization the private key to a file.\n")
+    print("Serialization the private key to a file.")
     private_pem = 'private.pem'
     with open(private_pem, 'wb') as private_out:
             private_out.write(private_key.private_bytes(encoding=serialization.Encoding.PEM,
@@ -40,9 +38,8 @@ def serializate(private_key, public_key,private_pem, public_pem):
                   encryption_algorithm=serialization.NoEncryption()))
 
 
-
 def encrypt_key(public_key, key):     # шифрование ключа симметричного алгоритма
-    print("Symmetric algorithm key encryption.\n")
+    print("Symmetric algorithm key encryption.")
     cipherkey = public_key.encrypt(key, padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()),algorithm=hashes.SHA256(),label = None))
     return cipherkey
 
@@ -50,10 +47,3 @@ def encrypt_key(public_key, key):     # шифрование ключа симм
 def key_to_file(file_name, key):                # сериализация ключа симмеричного алгоритма в файл
     with open(file_name, 'wb') as file:
         file.write(key)
-
-
-def key_from_file(file_name):                 # десериализация ключа симметричного алгоритма
-    with open(file_name, 'rb') as file:
-        content = file.read()
-    print(type(content))
-    print(content)

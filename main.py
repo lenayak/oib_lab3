@@ -1,6 +1,6 @@
 import argparse
 
-import generation_keys
+import generation_keys, encryption
 from info import *
 
 
@@ -20,6 +20,10 @@ if args.generation is not None:
     generation_keys.key_to_file(symmetric_encrypt_key, cipher)
 elif args.encryption is not None:
     print('Encryption\n')
+    private_key = encryption.get_private_key(private_pem)
+    sym_key = encryption.decrypt_key(symmetric_encrypt_key, private_key)
+    cipher_text = encryption.encrypt_text(initial_file_path, sym_key)
+    encryption.save_to_file(encrypted_file, cipher_text)
 elif args.decryption is not None:
     print('Decryption\n')
 
