@@ -30,7 +30,7 @@ def encrypt_text(initial_file_path, sym_key):               #шифровани�
     text = bytes(text, 'utf-8')
     padded_text = padder.update(text)+padder.finalize()
     iv = os.urandom(8)      #случайное значение для инициализации блочного режима, должно быть размером с блок и каждый раз новым
-    cipher = Cipher(algorithms.Blowfish(sym_key), modes.CBC(iv))   #invlid iv for CBC
+    cipher = Cipher(algorithms.Blowfish(sym_key), modes.CBC(iv))  
     encryptor = cipher.encryptor()     
     cipher_text = encryptor.update(padded_text)+encryptor.finalize()    
     return cipher_text

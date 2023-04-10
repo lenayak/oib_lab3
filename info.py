@@ -1,6 +1,6 @@
 initial_file = "file.txt"
 encrypted_file = "encrypted_file.txt"
-decrypted_file = "path/to/decryptad/file.txt"
+decrypted_file = "decrypted_file.txt"
 symmetric_encrypt_key = "encrypt_key.txt"
 public_pem = "public.pem"
 private_pem = "private.pem"
