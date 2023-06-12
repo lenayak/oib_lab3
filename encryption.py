@@ -40,7 +40,7 @@ def symmetric_encrypt(key: bytes, text: bytes) -> bytes:
     padder = symmetric_padding.ANSIX923(128).padder()
     padded_text = padder.update(text) + padder.finalize()
     iv = os.urandom(16)
-    cipher = Cipher(algorithms.Blowfish(key), modes.CBC(iv))
+    cipher = Cipher(algorithms.AES(key), modes.CBC(iv))
     encryptor = cipher.encryptor()
     cipher_text = encryptor.update(padded_text) + encryptor.finalize()
     logging.info("The text using the symmetric key has been encrypted")

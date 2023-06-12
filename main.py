@@ -18,7 +18,7 @@ if __name__ == "__main__":
             logging.info("Keys generation completed")
         except ValueError:
             logging.info(
-                "Invalid key length: the key length should be from 32 to 448."
+                "Invalid key length: the key length should be from 40 to 128 in 8-bit increments."
             )
     elif args.encryption:
         try:

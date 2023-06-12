@@ -38,7 +38,7 @@ def symmetric_decrypt(key: bytes, cipher_text: bytes) -> bytes:
         bytes: Decrypted text.
     """
     cipher_text, iv = cipher_text[16:], cipher_text[:16]
-    cipher = Cipher(algorithms.Blowfish(key), modes.CBC(iv))
+    cipher = Cipher(algorithms.AES(key), modes.CBC(iv))
     decryptor = cipher.decryptor()
     text = decryptor.update(cipher_text) + decryptor.finalize()
     unpadder = symmetric_padding.ANSIX923(64).unpadder()

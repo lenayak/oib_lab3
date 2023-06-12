@@ -38,7 +38,7 @@ def create_keys(len: int, settings: dict) -> None:
         length (int): Symmetric key length.
         settings (dict): Dictionary with paths.
     """
-    if len >= 32 and len <= 448:
+    if len == 128 or len == 192 or len == 256:
         len = int(len/8)
         symmetric_key = generate_symmetric_key(len)
         private_key, public_key = generate_asymmetric_keys()
