@@ -1,49 +1,54 @@
 import os
+import logging
 
 from cryptography.hazmat.primitives.asymmetric import rsa
-from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives.asymmetric import padding
-from cryptography.hazmat.primitives import hashes
+
+from load_info import save_private_key, save_public_key, save_symmetric_key
+from encryption import asymmetric_encrypt
 
 
-def gen_keys_for_asym():           #генерация пары ключей для асимметричного алгоритма шифрования
-    print("Generating a key pair for an asymmetric encryption algorithm.\n")
+def generate_symmetric_key(len: int) -> bytes:
+    """Generates a symmetric key for symmetric encryption algorithm.
+    Args:
+        length (int): Key length in bytes.
+    Returns:
+        bytes: Symmetric key.
+    """
+    symmetric_key = os.urandom(len)
+    logging.info("Symmetric key generated")
+    return symmetric_key
+
+
+def generate_asymmetric_keys() -> tuple:
+    """Generates an asymmetric key for asymmetric encryption algorithm.
+    Returns:
+        tuple: Asymmetric keys.
+    """
     keys = rsa.generate_private_key(public_exponent=65537, key_size=2048)
     private_key = keys
     public_key = keys.public_key()
-    return (private_key, public_key)
+    logging.info("Asymmetric key generated")
+    return private_key, public_key
 
 
-def gen_key_for_sym():              # генерация ключа симметричного аллгоритма шифрования
-    print("Symmetric encryption algorithm key generation.")
-    print("You can choose the key length yourself from 4 to 56 bytes\n (default 4 bytes)\n")
-    size = 4
-    input(size)
-    key = os.urandom(size)        # от 4х до 56 байт 
-    return key
-
-
-def serializate(private_key, public_key,private_pem, public_pem):
-    # сериализация открытого ключа в файл
-    print("Serializing the public key to a file.")
-    with open(public_pem, 'wb') as public_out:
-            public_out.write(public_key.public_bytes(encoding=serialization.Encoding.PEM,
-                 format=serialization.PublicFormat.SubjectPublicKeyInfo))
-    # сериализация закрытого ключа в файл
-    print("Serialization the private key to a file.")
-    private_pem = 'private.pem'
-    with open(private_pem, 'wb') as private_out:
-            private_out.write(private_key.private_bytes(encoding=serialization.Encoding.PEM,
-                  format=serialization.PrivateFormat.TraditionalOpenSSL,
-                  encryption_algorithm=serialization.NoEncryption()))
-
-
-def encrypt_key(public_key, key):     # шифрование ключа симметричного алгоритма
-    print("Symmetric algorithm key encryption.")
-    cipherkey = public_key.encrypt(key, padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()),algorithm=hashes.SHA256(),label = None))
-    return cipherkey
-
-
-def key_to_file(file_name, key):                # сериализация ключа симмеричного алгоритма в файл
-    with open(file_name, 'wb') as file:
-        file.write(key)
+def create_keys(len: int, settings: dict) -> None:
+    """Generates symmetric, public and private keys, 
+    stores them in the specified paths and decrypts the symmetric key using the public key.
+    Args:
+        length (int): Symmetric key length.
+        settings (dict): Dictionary with paths.
+    """
+    if len >= 32 and len <= 448:
+        len = int(len/8)
+        symmetric_key = generate_symmetric_key(len)
+        private_key, public_key = generate_asymmetric_keys()
+        save_public_key(public_key, settings['public'])
+        save_private_key(private_key, settings['private'])
+        ciphered_key = asymmetric_encrypt(public_key, symmetric_key)
+        save_symmetric_key(ciphered_key, settings['symmetric_key'])
+        logging.info(
+            "Symmetric and asymmetric keys generated and written to a file")
+    else:
+        logging.info(
+            "Invalid key length: the key length should be 128/192/256 in 8-bit increments")
+        raise ValueError
