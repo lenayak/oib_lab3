@@ -4,7 +4,7 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.serialization import load_pem_public_key, load_pem_private_key
 
 
-def settings(file: str) -> dict:
+def load_settings(file: str) -> dict:
     """Loads a settings file into the program.
     Args:
         json_file (str): The path to the json file with the settings.

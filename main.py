@@ -1,16 +1,17 @@
 import argparse
 import logging
-from load_info import settings
+from load_info import load_settings
 from generation_keys import create_keys
 from encryption import encryption_text
 from decryption import decryption_text
 
 if __name__ == "__main__":
-    info = settings("info.json")
+    info = load_settings("info.json")
     parser = argparse.ArgumentParser(description="Cryptosystem")
-    parser.add_argument("-gen", "--generation", type = int, help="Запускает режим генерации ключей")
-    parser.add_argument("-enc", "--encryption", action='store_true', help="Запускает режим шифрования")
-    parser.add_argument("-dec", "--decryption", action='store_true', help="Запускает режим дешифрования")
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("-gen", "--generation", type = int, help="Запускает режим генерации ключей")
+    group.add_argument("-enc", "--encryption", action='store_true', help="Запускает режим шифрования")
+    group.add_argument("-dec", "--decryption", action='store_true', help="Запускает режим дешифрования")
     args = parser.parse_args()
     if args.generation:
         try:
@@ -18,7 +19,7 @@ if __name__ == "__main__":
             logging.info("Keys generation completed")
         except ValueError:
             logging.info(
-                "Invalid key length: the key length should be from 40 to 128 in 8-bit increments."
+                "Invalid key length: the key length should be 128/192/256."
             )
     elif args.encryption:
         try:
