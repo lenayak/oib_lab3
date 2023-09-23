@@ -47,8 +47,8 @@ def create_keys(len: int, settings: dict) -> None:
         ciphered_key = asymmetric_encrypt(public_key, symmetric_key)
         save_symmetric_key(ciphered_key, settings['symmetric_key'])
         logging.info(
-            "Symmetric and asymmetric keys generated and written to a file.\nLength of the key: ", len)
+            f"Symmetric and asymmetric keys generated and written to a file.\nLength of the key: {len}")
     else:
         logging.info(
-            "Invalid key length: the key length should be 128/192/256.\n Length of the key: ", len)
+            f"Invalid key length: the key length should be 128/192/256.\n Length of the key: {len}")
         raise ValueError
