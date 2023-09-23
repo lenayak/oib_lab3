@@ -18,7 +18,7 @@ if __name__ == "__main__":
             create_keys(args.generation, info)
             logging.info("Keys generation completed")
         except ValueError:
-            logging.info(
+            logging.exception(
                 "Invalid key length: the key length should be 128/192/256."
             )
     elif args.encryption:
@@ -26,10 +26,10 @@ if __name__ == "__main__":
             encryption_text(info)
             logging.info("Encryption completed")
         except Exception:
-            logging.info("Something is wrong with the encryption key")
+            logging.exception("Something is wrong with the encryption key")
     elif args.decryption:
         try:
             decryption_text(info)
             logging.info("Decryption completed")
         except Exception:
-            logging.info("Something is wrong with the decryption key")
+            logging.exception("Something is wrong with the decryption key")
