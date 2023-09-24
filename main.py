@@ -2,8 +2,7 @@ import argparse
 import logging
 from load_info import load_settings
 from generation_keys import create_keys
-from encryption import encryption_text
-from decryption import decryption_text
+from functions import encryption_text, decryption_text
 
 if __name__ == "__main__":
     info = load_settings("info.json")

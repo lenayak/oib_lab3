@@ -4,7 +4,7 @@ import logging
 from cryptography.hazmat.primitives.asymmetric import rsa
 
 from load_info import save_private_key, save_public_key, save_symmetric_key
-from encryption import asymmetric_encrypt
+from asymmetric_cryptography import asymmetric_encrypt
 
 
 def generate_symmetric_key(len: int) -> bytes:
