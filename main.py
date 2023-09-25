@@ -18,7 +18,7 @@ if __name__ == "__main__":
             logging.info("Keys generation completed")
         except ValueError:
             logging.exception(
-                "Invalid key length: the key length should be 128/192/256."
+                f"Invalid key length: the key length should be 128/192/256. Length of the key: {args.generation}"
             )
     elif args.encryption:
         try:
