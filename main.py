@@ -31,4 +31,4 @@ if __name__ == "__main__":
             decryption_text(info)
             logging.info("Decryption completed")
         except Exception:
-            logging.exception("Something is wrong with the decryption key")
+            logging.error("Something is wrong with the decryption key")
