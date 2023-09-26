@@ -17,7 +17,7 @@ def load_settings(file: str) -> dict:
             settings = json.load(file)
         logging.info("Settings loaded successfully")
     except OSError as err:
-        logging.info("Settings not loaded")
+        logging.error(f"Settings not loaded. {err.message}")
         raise err
     return settings
 
@@ -33,7 +33,7 @@ def save_symmetric_key(key: bytes, file_name: str) -> None:
             key_file.write(key)
         logging.info("Symmetric key saved")
     except OSError as err:
-        logging.info("Symmetric key not saved")
+        logging.error(f"Symmetric key not saved. {err.message}")
         raise err
     
 
@@ -49,7 +49,7 @@ def load_symmetric_key(file_name: str) -> bytes:
             key = key_file.read()
         logging.info("Symmetric key saved")
     except OSError as err:
-        logging.info("Symmetric key not saved")
+        logging.error(f"Symmetric key not saved.{err.message}")
         raise err
     return key
 
@@ -71,7 +71,7 @@ def save_private_key(private_key, file_name: str) -> None:
             )
         logging.info("Private key saved")
     except OSError as err:
-        logging.info("Private key not saved")
+        logging.error(f"Private key not saved. {err.message}")
         raise err
     
 
@@ -89,7 +89,7 @@ def load_private_key(private_pem: str):
         private_key = load_pem_private_key(private_bytes, password=None)
         logging.info("Private key loaded")
     except OSError as err:
-        logging.info("Private key not loaded")
+        logging.error(f"Private key not loaded. {err.message}")
         raise err
     return private_key
 
@@ -110,7 +110,7 @@ def save_public_key(public_key, file_name: str) -> None:
             )
         logging.info("Public key saved")
     except OSError as err:
-        logging.info("Public key not saved")
+        logging.error(f"Public key not saved. {err.message}")
         raise err
     
 
@@ -128,7 +128,7 @@ def load_public_key(public_pem: str):
         public_key = load_pem_public_key(public_bytes)
         logging.info("Public key saved")
     except OSError as err:
-        logging.info("Public key not saved")
+        logging.error(f"Public key not saved. {err.message}")
         raise err
     return public_key
 
@@ -145,7 +145,7 @@ def read_text(file_name: str) -> bytes:
             text = text_file.read()
         logging.info("Text read successfully")
     except OSError as err:
-        logging.info("Text not read")
+        logging.error(f"Text not read. {err.message}")
         raise err
     return text
 
@@ -161,5 +161,5 @@ def write_text(text: bytes, file_name: str) -> None:
             text_file.write(text)
         logging.info("Text written successfully")
     except OSError as err:
-        logging.info("Text not written")
+        logging.error(f"Text not written. {err.message}")
         raise err
